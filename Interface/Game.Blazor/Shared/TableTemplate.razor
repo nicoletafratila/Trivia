@@ -1,0 +1,35 @@
+﻿@typeparam TItem
+
+<div class="col-12">
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table class="table table-bordered table-sm table-striped mb-0 caption-top">
+            @if (ShowTableCaption)
+            {
+                <caption>@TableCaption</caption>
+            }
+            <thead class="header-bg-secondary">
+                <tr>
+                    @TableHeader
+                </tr>
+            </thead>
+            <tbody>
+                @if (@Items == null)
+                {
+                     <tr>Loading... </tr>
+                }
+                else
+                {
+                    if (RowTemplate != null)
+                    {
+                        @foreach (var item in Items)
+                        {
+                            <tr>
+                                @RowTemplate(item)
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

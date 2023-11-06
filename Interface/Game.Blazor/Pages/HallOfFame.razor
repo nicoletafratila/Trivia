@@ -1,0 +1,56 @@
+﻿@page "/halloffame"
+@using Common.ViewModels.Extensions
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="card trv-card mb-5" style="color: #fff;">
+            <div class="card-header text-center">
+                <h2>Hall of Fame</h2>
+            </div>
+            <div card-body></div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    @if (Users == null)
+    {
+        <div class="card"></div>
+        <div class="card-header"></div>
+        <div class="card-body">
+            <p><em>Loading...</em></p>
+        </div>
+    }
+    else
+    {
+        <div class="col-sm-12 mt-3 mb-5">
+            <TableTemplate Items="@Users.Items!.WithIndex()">
+                <TableHeader>
+                    <th>Place</th>
+                    <th>Username</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Score</th>
+                    <th>Game name</th>
+                </TableHeader>
+                <RowTemplate Context="User">
+                  <td>@CalculateIndex(User.Index)</td>
+                  <td>@User.Item.NickName</td>
+                  <td>@User.Item.Score</td>
+                  <td>@User.Item.GameName</td>
+                </RowTemplate>
+            </TableTemplate>
+
+            @if (Users.Metadata != null)
+            {
+                <Pagination CurrentPage="@Users.Metadata.PageNumber"
+                            TotalItems="@Users.Metadata.TotalCount"
+                            TotalPages="@Users.Metadata.TotalPages"
+                            HasNext="@Users.Metadata.HasNext"
+                            HasPrevious="@Users.Metadata.HasPrevious"
+                            PageChanged="@OnPageChangedAsync" />
+            }
+        </div>
+    }
+</div>
+

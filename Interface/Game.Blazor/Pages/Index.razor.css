@@ -1,0 +1,73 @@
+﻿.btn-category {
+    border-radius: 5px;
+    background-color: #2e308e;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 25px;
+    padding: 20px;
+    width: 250px;
+    height: 100px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+    .btn-category span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+        .btn-category span:after {
+            content: '\00bb';
+            position: absolute;
+            opacity: 0;
+            top: 0;
+            right: -20px;
+            transition: 0.5s;
+        }
+
+    .btn-category:hover span {
+        padding-right: 25px;
+    }
+
+        .btn-category:hover span:after {
+            opacity: 1;
+            right: 0;
+        }
+
+.bg-category {
+    background-color: lightgray;
+    background-size: cover;
+    width: 1120px;
+    height: 520px;
+    margin: 90px;
+    padding: 40px;
+}
+
+.max-w-screen-lg{
+    max-width:1024px;
+}
+
+.text-gray-900 {
+    letter-spacing: -.025em;
+    --tw-text-opacity: 1;
+    color: rgb(17 24 39 / var(--tw-text-opacity));
+    font-size: 3.35rem;
+    line-height: 1;
+}
+
+.font-extrabold {
+    font-weight: 700;
+}
+
+.font-bold {
+    font-weight: 600;
+}
+
+.prm-trivia-color {
+    background: #26efe9;
+    color: #000048;
+}

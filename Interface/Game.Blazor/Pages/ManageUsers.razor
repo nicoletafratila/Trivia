@@ -1,0 +1,90 @@
+﻿@page "/manageusers"
+@inject IJSRuntime _jsRuntime
+<PageTitle>Manage users</PageTitle>
+
+<AuthorizeView>
+    <Authorized Context="authContext">
+        <body>
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="card trv-card mb-5" style="color: #fff;">
+                        <div class="card-header text-center">
+                            <h2>Manage users</h2>
+                        </div>
+                        <div class="card-body"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="col-sm-12">
+                    @if (Users == null)
+                    {
+                        <h3>Loading...</h3>
+                    }
+                    else
+                    {
+                      <TableTemplate Items="Users">
+                            <TableHeader>
+                                <th></th>
+                                <th>User name</th>
+                                <th>First name</th>
+                                <th>Last name</th>
+                                <th>Phone number</th>
+                                <th>Email</th>
+                                <th>Is active?</th>
+                                <th></th>
+                            </TableHeader>
+                            <RowTemplate Context="SelectedUser">
+                                <td align="center">
+                                    <img src="@SelectedUser.ProfilePictureUrl" width="100" height="80" />
+                                </td>
+                                <td>@SelectedUser.UserName</td>
+                                <td>@SelectedUser.FirstName</td>
+                                <td>@SelectedUser.LastName</td>
+                                <td>@SelectedUser.PhoneNumber</td>
+                                <td>@SelectedUser.EmailAddress</td>
+                                <td>
+                                    <input type="checkbox" checked="@SelectedUser.IsActive" @onchange="args =>
+                            {
+                                if (args!=null && args.Value!=null)
+                                {
+                                    UpdateAsync(SelectedUser, args.Value);
+                                }
+                            }" />
+                                </td>
+                                <td>
+                                    <a href="@($"edituser/{SelectedUser.UserId}")" class="bi bi-pencil m-1"></a>
+
+                                    @if (!string.IsNullOrEmpty(SelectedUser.UserId))
+                                    {
+                                        <a class="bi bi-trash m-1" @onclick="args => DeleteAsync(SelectedUser.UserId)" hover></a>
+                                    }
+                                </td>
+                            </RowTemplate>
+                        </TableTemplate>
+
+                        <br />
+
+                        <div class="col text-center">
+                            <button class="btn btn-primary prm-trivia-color" @onclick="DownloadFileFromStreamAsync">
+                                Download User Report
+                            </button>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </body>
+    </Authorized>
+
+    <NotAuthorized>
+        @if (context.User.Identity?.IsAuthenticated != true || !context.User.IsInRole("admin"))
+        {
+            <RedirectToLogin />
+        }
+        else
+        {
+            <p role="alert">You are not authorized to access this resource.</p>
+        }
+    </NotAuthorized>
+</AuthorizeView>

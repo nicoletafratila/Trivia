@@ -1,0 +1,32 @@
+﻿.buttondiv {
+    width: 700px;
+    height: 700px;
+    position: absolute;
+    top: 100px;
+    bottom: 100px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: relative;
+}
+
+.question {
+    text-align: center;
+    font-size: x-large;
+    position: relative;
+}
+
+.divider {
+    width: 5px;
+    height: 10px;
+    display: inline-block;
+}
+
+.bigdivider {
+    width: 25px;
+    height: 20px;
+}
+
+.trv-progress-bar {
+    background: #26efe9;
+}

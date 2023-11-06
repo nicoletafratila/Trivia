@@ -1,0 +1,24 @@
+﻿.quodrant {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.qtop,
+.qbottom {
+    width: 96%;
+    height: 46vh;
+}
+
+.quodrant1,
+.quodrant2,
+.quodrant3,
+.quodrant4 {
+    display: inline;
+    float: left;
+    width: 46%;
+    height: 96%;
+    border-radius: 30px;
+    margin: 2%;
+}

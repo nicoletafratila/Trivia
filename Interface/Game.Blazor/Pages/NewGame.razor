@@ -1,0 +1,91 @@
+﻿@page "/newgame/"
+@page "/newgame/{categoryid}"
+@inject NavigationManager Navigation
+
+@using Common.ViewModels;
+
+<AuthorizeView>
+    <Authorized Context="authContext">
+        <PageTitle>New game</PageTitle>
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-sm-12">
+                    <div class="card trv-card mb-5" style="color: #fff;">
+                        <div class="card-header text-center">
+                            <h2>Create a new game</h2>
+                        </div>
+
+                        <div class="card-body">
+                            <EditForm Model="@Game" OnValidSubmit="@Save" Context="formContext">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+
+                                <div class="form-group">
+                                    <label for="name" class="col-sm-3">Game name: </label>
+                                    <InputText id="nameInput" class="form-control" @bind-Value="@Game.Name" placeholder="Enter the game name"></InputText>
+                                    <ValidationMessage For="@(() => Game.Name)" />
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="category" class="col-sm-3">Questions from category: </label>
+                                    <InputSelect id="categoryInput" class="form-select" @bind-Value="@CategoryId" placeholder="Select the category for the questions">
+                                        <option selected value="0">Choose...</option>
+                                        @if (Categories != null)
+                                        {
+                                            @foreach (var category in Categories)
+                                            {
+                                                <option value="@category.Id">@category.Name</option>
+                                            }
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => Game.CategoryId)" />
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <InputRadioGroup id="gameTypeRadioGroup" @bind-Value="@Game.Type" placeholder="Select the game type">
+                                        @foreach (var gameType in (GameType[])Enum.GetValues(typeof(GameType)))
+                                        {
+                                            <InputRadio id="gameTypeRadioGroup" Value="gameType" class="form-check-input" style="margin-right: 5px" /> @gameType
+                                            <br>
+                                        }
+                                    </InputRadioGroup>
+                                    <ValidationMessage For="@(() => Game.Type)" />
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <button type="submit" class="btn btn-primary edit-btn prm-trivia-color">Save</button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <TableTemplate Items="@Games">
+                        <TableCaption>Games:</TableCaption>
+                        <TableHeader>
+                            <th>Game's Name</th>
+                            <th style="width: 70px"></th>
+                        </TableHeader>
+                        <RowTemplate Context="Game">
+                            <td class="col">@Game.Name</td>
+                            <td><button class="btn btn-primary prm-trivia-color" type="button" @onclick="() => Join(Game)">Join</button></td>
+                        </RowTemplate>
+                    </TableTemplate>
+                </div>
+            </div>
+
+        </div>
+    </Authorized>
+
+    <NotAuthorized>
+        @if (context.User.Identity?.IsAuthenticated != true)
+        {
+            <RedirectToLogin />
+        }
+        else
+        {
+            <p role="alert">You are not authorized to access this resource.</p>
+        }
+    </NotAuthorized>
+</AuthorizeView>

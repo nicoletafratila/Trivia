@@ -1,0 +1,142 @@
+﻿@page "/newquestion/"
+@using Common.ViewModels.Extensions;
+
+<AuthorizeView>
+    <Authorized Context="authContext">
+        <PageTitle>New question</PageTitle>
+
+        @if (Question != null)
+        {
+            <div class="row justify-content-center">
+                <div class="col-sm-12">
+                    <div class="card trv-card mb-5" style="color: #fff;">
+                        <div class="card-header text-center">
+                            <h2>Create a new question</h2>
+                        </div>
+
+                        <div class="card-body">
+                            <EditForm Model="@Question" OnValidSubmit="@SaveAsync" Context="formContext">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+
+                                <div class="form-group">
+                                    <label for="questionInput" class="col-sm-3">Question: </label>
+                                    <InputText id="questionInput" class="form-control" @bind-Value="@Question.Text" placeholder="Enter the question"></InputText>
+                                    <ValidationMessage For="@(() => Question.Text)" />
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="categoryInput" class="col-sm-3">Question from category: </label>
+                                    <InputSelect id="categoryInput" class="form-select" @bind-Value="@CategoryId" placeholder="Select the category for the question">
+                                        <option selected value="0">Choose...</option>
+                                        @if (Categories != null)
+                                        {
+                                            @foreach (var category in Categories)
+                                            {
+                                                <option value="@category.Id">@category.Name</option>
+                                            }
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => Question.CategoryId)" />
+                                </div>
+
+                                @if (Answer != null)
+                                {
+                                    <div class="form-group mt-3">
+                                        <label for="answer" class="col-sm-3">Answer: </label>
+                                        <div class="input-group">
+                                            <InputText id="answer" class="form-control" @bind-Value="@Answer.Text" placeholder="Enter an answer"></InputText>
+                                            @if (CanAddAnswer == true)
+                                            {
+                                                <button class="btn btn-primary prm-trivia-color" type="button" @onclick="@AddAnswer">Add</button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-primary prm-trivia-color" type="button" disabled @onclick="@AddAnswer">Add</button>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+
+                                <TableTemplate Items="@Answers" ShowTableCaption="true">
+                                    <TableCaption>Answers:</TableCaption>
+                                    <TableHeader>
+                                        <th>Text</th>
+                                        <th style="width: 90px">Correct</th>
+                                        <th style="width: 30px"></th>
+                                    </TableHeader>
+                                    <RowTemplate Context="Answer">
+                                        <td class="col">@Answer.Text</td>
+                                        <td>
+                                            <input type="checkbox" checked="@Answer.IsCorrect" @onchange="args =>
+                                        {
+                                            if (args!=null && args.Value!=null)
+                                            {
+                                                OnCorrectAnswerChanged(Answer, args.Value);
+                                            }
+                                        }" />
+                                        </td>
+                                        <td>
+                                            <button class="btn-close btn-sm" type="button" @onclick="() => DeleteAnswer(Answer)"></button>
+                                        </td>
+                                    </RowTemplate>
+                                </TableTemplate>
+
+                                <div class="form-group mt-3">
+                                    <button type="submit" class="btn btn-primary edit-btn prm-trivia-color">Save</button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    @if (Questions == null)
+                    {
+                        <h3>Loading...</h3>
+                    }
+                    else
+                    {
+                        <TableTemplate Items="@Questions.Items!.WithIndex()">
+                            <TableHeader>
+                                <th>No.</th>
+                                <th style="width: 130px">Category</th>
+                                <th>Text</th>
+                                <th>Answer</th>
+                                <th style="width: 30px"></th>
+                            </TableHeader>
+                            <RowTemplate Context="Question">
+                                <td>@CalculateIndex(Question.Index)</td>
+                                <td class="col">@Question.Item.CategoryName</td>
+                                <td class="col">@Question.Item.Text</td>
+                                <td class="col">@Question.Item.CorrectAnswer</td>
+                                <td><button class="btn-close btn-sm" type="button" @onclick="() => DeleteAsync(Question.Item)"></button></td>
+                            </RowTemplate>
+                        </TableTemplate>
+
+                        @if (Questions.Metadata != null)
+                        {
+                            <Pagination CurrentPage="@Questions.Metadata.PageNumber"
+                                        TotalItems="@Questions.Metadata.TotalCount"
+                                        TotalPages="@Questions.Metadata.TotalPages"
+                                        HasNext="@Questions.Metadata.HasNext"
+                                        HasPrevious="@Questions.Metadata.HasPrevious"
+                                        PageChanged="@OnPageChangedAsync" />
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </Authorized>
+
+    <NotAuthorized>
+        @if (context.User.Identity?.IsAuthenticated != true || !context.User.IsInRole("admin"))
+        {
+            <RedirectToLogin />
+        }
+        else
+        {
+            <p role="alert">You are not authorized to access this resource.</p>
+        }
+    </NotAuthorized>
+</AuthorizeView>

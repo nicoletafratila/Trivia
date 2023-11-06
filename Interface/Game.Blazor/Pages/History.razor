@@ -1,0 +1,67 @@
+﻿@page "/history"
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="card trv-card mb-5" style="color: #fff;">
+            <div class="card-header text-center">
+                <h2>Games and scores</h2>
+            </div>
+            <div class="card-body"></div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="col-sm-12 mt-3 mb-5">
+        @if (UserGames == null)
+        {
+            <div class="card"></div>
+            <div class="card-header"></div>
+            <div class="card-body">
+                <p><em>Loading...</em></p>
+            </div>
+        }
+        else
+        {
+            <h5 class="text-center" style="color: #000048; font-size:2.35rem">User's games</h5>
+            <TableTemplate Items="UserGames">
+                <TableHeader>
+                    <th>User's name</th>
+                    <th>Score</th>
+                    <th>Game name</th>
+                </TableHeader>
+                <RowTemplate Context="Game">
+                    <td>@Game.NickName</td>
+                    <td>@Game.Score</td>
+                    <td>@Game.GameName</td>
+                </RowTemplate>
+            </TableTemplate>
+        }
+    </div>
+
+    <div class="col-sm-12 mt-3 mb-5">
+        @if (BestStreaks == null)
+        {
+            <div class="card"></div>
+            <div class="card-header"></div>
+            <div class="card-body">
+                <p><em>Loading...</em></p>
+            </div>
+        }
+        else
+        {
+            <h5 class="text-center" style="color: #000048; font-size:2.35rem">User's best streaks</h5>
+            <TableTemplate Items="BestStreaks">
+                <TableHeader>
+                    <th>User's name</th>
+                    <th>Score</th>
+                    <th>Game name</th>
+                </TableHeader>
+                <RowTemplate Context="BestStreak">
+                  <td>@BestStreak.NickName</td>
+                  <td>@BestStreak.Score</td>
+                  <td>@BestStreak.GameName</td>
+                </RowTemplate>
+            </TableTemplate>
+        }
+    </div>
+</div>

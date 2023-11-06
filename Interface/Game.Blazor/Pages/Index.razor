@@ -1,0 +1,103 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<html>
+<body>
+    <AuthorizeView>
+        <Authorized>
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-xl">
+                        <h1 class="text-4xl" style="font-weight:800;">Play, Create & Join Other Players in a Relaxing & Fun Trivia</h1>
+
+                        <h2 class="mt-4 text-2xl leading-none text-primary-50">Choose a category in which to play the Trivia game: </h2>
+                        <p class="mt-4">Answer multiple-choice quiz questions as quickly and as accurately as possible in each themed game. Your score and daily rank will be displayed on completion of the game.</p>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-xl">
+                        <div class="bg-category">
+                            @if (Categories != null)
+                            {
+                                @foreach (var item in Categories)
+                                {
+                                    <button class="btn-category" @onclick="args => NewGame(item.Id)"><span>@item.Name </span></button>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <div class="card mb-3 mt-3">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h2 class="card-title text-center mb-3 font-extrabold text-gray-900">Play & Have Fun with Trivia Cognizant Game</h2>
+                            <p class="card-text mb-3">
+                                Trivia Cognizant is an exciting quiz with different categories & topics from General, Animals, Biology, Entertaiment, Food & Drinks,
+                                Funny, Geography, History, Kid-Frendly, Movie, Music, Pop-Culture, Science, Sport, Technology, Universe each with 100 trivia questions.
+                            </p>
+                            <div class="text-center">
+                                <a href="authentication/login" class="btn btn-primary btn-lg rounded-pill prm-trivia-color" role="button" aria-pressed="true">Sign up Now</a>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-md-6">
+                        <img src="/images/CaptureCategories.JPG" class="img-fluid rounded-start" />
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        <img src="/images/Capt_CreateANewGame.jpg" class="img-fluid rounded-start" />
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h3 class="card-title mb-3 font-bold">Choose a category or Create a Game to Play</h3>
+                            <p class="card-text">Choose to play a quiz game or create a custom game on your own.</p>
+                            <ul>
+                                <li class="font-bold mt-5">Just Play</li>
+                                <ul>
+                                    <li>Play our trivia quiz games from our different categories.</li>
+                                </ul>                             
+                                
+                                <li class="font-bold mt-5">Custom Trivia Cognizant</li>
+                                <ul>
+                                    <li>Use of pre-made trivia question library and play your own game.</li>
+                                </ul>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h3 class="card-title mb-3 font-bold">Have Fun with Trivia Cognizant</h3>
+                            <p class="card-text">Enjoy a fun and intuitive Trivia Cognizant gameplay experience and try to be the best on it.</p>
+                            <ul>
+                                <li class="font-bold mt-5">Dynamic History Page</li>
+                                <ul>
+                                    <li>Keep track of your score by using the History page. Follow the score whij is updated after each round.</li>
+                                </ul>
+                                <li class="font-bold mt-5">Hall of Fame</li>
+                                <ul>
+                                    <li>See who is the best on Trivia Cognizant Games by exploring the Hall of Fame page and try to outrun them.</li>
+                                </ul>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="/images/Podium.jpg" class="img-fluid rounded-start" width="600" height="200" />
+                    </div>
+                </div>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+</body>
+</html>

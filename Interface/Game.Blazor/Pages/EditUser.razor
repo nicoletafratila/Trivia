@@ -1,0 +1,93 @@
+﻿@page "/edituser/{userid}"
+@using Microsoft.AspNetCore.Components.Forms
+
+<AuthorizeView>
+    <Authorized Context="authContext">
+        <PageTitle>Edit user</PageTitle>
+
+        @if (SelectedUser != null)
+        {
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row g-0">
+                                <div class="col-md-8">
+                                    <h2>Details for @SelectedUser.UserName</h2>
+                                </div>
+                                <div class="col-md-4 align-self-center">
+                                    <img class="img-fluid" src="@SelectedUser.ProfilePictureUrl" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <EditForm Model="@SelectedUser" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary></ValidationSummary>
+
+                                <div class="form-group">
+                                    <label for="userName" class="col-sm-3">User Name: </label>
+                                    <InputText id="userNameInput" class="form-control col-sm-8" @bind-Value="@SelectedUser.UserName" placeholder="Enter user's name"></InputText>
+                                    <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => SelectedUser.UserName)" />
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="firstName" class="col-sm-3">First Name: </label>
+                                    <InputText id="firstNameInput" class="form-control col-sm-8" @bind-Value="@SelectedUser.FirstName" placeholder="Enter user's first name"></InputText>
+                                    <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => SelectedUser.FirstName)" />
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="lastName" class="col-sm-3">Last Name: </label>
+                                    <InputText id="lastNameInput" class="form-control col-sm-8" @bind-Value="@SelectedUser.LastName" placeholder="Enter user's last name"></InputText>
+                                    <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => SelectedUser.LastName)" />
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="email" class="col-sm-3">Email: </label>
+                                    <InputText id="emailInput" class="form-control col-sm-8" @bind-Value="@SelectedUser.EmailAddress" placeholder="Enter user's email"></InputText>
+                                    <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => SelectedUser.EmailAddress)" />
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="phoneNumber" class="col-sm-3">Phone Number: </label>
+                                    <InputText id="phoneNumberInput" class="form-control col-sm-8" @bind-Value="@SelectedUser.PhoneNumber" placeholder="Enter user's phone number"></InputText>
+                                    <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => SelectedUser.PhoneNumber)" />
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="inputFile" class="col-sm-3">Select Image: </label>
+                                    <InputFile id="inputFile" class="form-control" OnChange="OnInputFileChange" multiple accept="image/png, image/jpeg, image/gif" />
+                                </div>
+
+                                <button type="submit" class="btn btn-primary edit-btn mt-3 px-3 prm-trivia-color">Save</button> <span />
+
+                                @if (!string.IsNullOrEmpty(SelectedUser.UserId))
+                                {
+                                    <a class="btn btn-danger mt-3 px-3" @onclick="@Delete">Delete</a>
+                                    <span />
+                                }
+
+                                <a class="btn btn-primary table-btn prm-trivia-color mt-3 px-3" @onclick="@NavigateToOverview">Back to overview</a>
+
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </Authorized>
+
+    <NotAuthorized>
+        @if (context.User.Identity?.IsAuthenticated != true || !context.User.IsInRole("admin"))
+        {
+            <RedirectToLogin />
+        }
+        else
+        {
+            <p role="alert">You are not authorized to access this resource.</p>
+        }
+    </NotAuthorized>
+</AuthorizeView>
